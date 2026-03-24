@@ -6,21 +6,35 @@
   [![License: MIT](https://img.shields.io/badge/License-MIT-10B981?style=flat-square)](LICENSE)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](#)
   [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](#)
-  [![Gemini](https://img.shields.io/badge/Gemini_API-Google-4285F4?style=flat-square&logo=google&logoColor=white)](#)
+  [![Vite](https://img.shields.io/badge/Vite-build-646CFF?style=flat-square&logo=vite&logoColor=white)](#)
+  <br/>
+  [![Podcast](https://img.shields.io/badge/Podcast-AI_Generated-F97316?style=flat-square&logo=applepodcasts&logoColor=white)](#features)
+  [![Gemini](https://img.shields.io/badge/Gemini_API-scripting-4285F4?style=flat-square&logo=google&logoColor=white)](#architecture)
   [![JARVIS](https://img.shields.io/badge/JARVIS-Ecosystem-8B5CF6?style=flat-square)](https://github.com/Turbo31150/jarvis-linux)
+  [![Linux](https://img.shields.io/badge/Linux-native-FCC624?style=flat-square&logo=linux&logoColor=black)](#)
+  [![AI Generated](https://img.shields.io/badge/Content-AI_Generated-10B981?style=flat-square&logo=openai&logoColor=white)](#)
 
   <br/>
   <p><strong>AI-Generated Podcasts from JARVIS System Logs</strong></p>
   <p><em>Transform raw infrastructure telemetry into engaging, narrated audio episodes — powered by Gemini</em></p>
+
+  [**Features**](#-features) · [**Architecture**](#-architecture) · [**Quick Start**](#-quick-start) · [**AI Studio**](https://ai.studio/apps/ee621fba-4ce2-493b-84b7-e682083b7ae3)
 </div>
 
 ---
 
 ## Overview
 
-**Linux-Jarvis-Podcasts** automatically converts JARVIS cluster logs, metrics, and events into listenable podcast episodes. It reads system activity (deployments, incidents, performance spikes, trading signals) and uses Gemini to script a natural-language narrative, then synthesizes it into audio.
+**Linux-Jarvis-Podcasts** automatically converts JARVIS cluster logs, metrics, and events into listenable podcast episodes. It reads system activity (deployments, incidents, performance spikes, trading signals) and uses **Gemini API** to script a natural-language narrative, then synthesizes it into audio.
 
 Think of it as your **daily ops briefing** — but you can listen to it while making coffee.
+
+### Why?
+
+- **Hands-free monitoring** — listen to your cluster status during commute or workout
+- **Context-rich summaries** — AI turns thousands of log lines into a 5-minute episode
+- **Automated pipeline** — cron-driven generation, zero manual work
+- **Full JARVIS integration** — reads from all 9 system layers
 
 ---
 
@@ -34,6 +48,7 @@ Think of it as your **daily ops briefing** — but you can listen to it while ma
 | **Episode Management** | Automatic episode numbering, metadata, and archival |
 | **Multi-Source** | Supports logs from all JARVIS layers — boot, orchestration, trading, voice |
 | **Scheduled Generation** | Can run on cron for daily/weekly automated episodes |
+| **Web Player** | Built-in React player with episode history and search |
 
 ---
 
@@ -55,6 +70,9 @@ JARVIS Cluster Logs          Metrics / Events / Alerts
                    │
                    ▼
           Podcast Episode (.mp3 + metadata)
+                   │
+                   ▼
+          Web Player (React + Vite)
 ```
 
 ---
@@ -85,13 +103,30 @@ You can also view the app in [AI Studio](https://ai.studio/apps/ee621fba-4ce2-49
 
 ---
 
+## Project Structure
+
+```
+Linux-Jarvis-Podcats/
+├── index.html           ← Entry point
+├── package.json         ← Dependencies
+├── vite.config.ts       ← Vite configuration
+├── tsconfig.json        ← TypeScript config
+├── metadata.json        ← Episode metadata
+└── src/                 ← Source code
+    ├── components/      ← React UI components
+    ├── services/        ← Gemini API, TTS, log parsing
+    └── utils/           ← Helpers
+```
+
+---
+
 ## JARVIS Ecosystem
 
 This project is part of the **JARVIS** distributed AI cluster:
 
 - [jarvis-linux](https://github.com/Turbo31150/jarvis-linux) — Distributed Autonomous AI Cluster
 - [TradeOracle](https://github.com/Turbo31150/TradeOracle) — Autonomous Crypto Trading Agent
-- [lumen](https://github.com/Turbo31150/lumen) — Multilingual Live AI Web App
+- [lumen-transcription-multilangue](https://github.com/Turbo31150/lumen-transcription-multilangue) — Multilingual Live Transcription
 - [gemini-live-trading-agent](https://github.com/Turbo31150/gemini-live-trading-agent) — Voice Trading Assistant
 - **Linux-Jarvis-Podcasts** — AI Podcasts from System Logs *(this repo)*
 
