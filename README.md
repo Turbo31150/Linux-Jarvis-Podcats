@@ -23,6 +23,19 @@
 
 ---
 
+
+
+## Pipeline
+
+```mermaid
+graph LR
+    Topic[Topic Selection] --> Script[AI Script Gen]
+    Script --> TTS[Text-to-Speech]
+    TTS --> Edit[Auto Edit]
+    Edit --> Publish[Publish]
+```
+
+
 ## Overview
 
 **Linux-Jarvis-Podcasts** automatically converts JARVIS cluster logs, metrics, and events into listenable podcast episodes. It reads system activity (deployments, incidents, performance spikes, trading signals) and uses **Gemini API** to script a natural-language narrative, then synthesizes it into audio.
