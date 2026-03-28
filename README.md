@@ -406,6 +406,27 @@ server {
 }
 ```
 
+
+## Supported TTS Voices
+
+| Voice | Language | Style | Quality |
+|-------|----------|-------|---------|
+| DeniseNeural | French | Natural | ⭐⭐⭐⭐⭐ |
+| HenriNeural | French | Professional | ⭐⭐⭐⭐ |
+| Jenny | English | Conversational | ⭐⭐⭐⭐⭐ |
+| Aria | English | Narration | ⭐⭐⭐⭐ |
+| Piper-fr | French | Fast/local | ⭐⭐⭐ |
+
+## Output Formats
+
+| Format | Quality | Size | Use Case |
+|--------|---------|------|----------|
+| MP3 320kbps | High | ~2.5MB/min | Podcast platforms |
+| MP3 128kbps | Good | ~1MB/min | Web streaming |
+| WAV 44.1kHz | Lossless | ~10MB/min | Editing |
+| OGG Vorbis | Good | ~1.2MB/min | Web embedding |
+
+
 ---
 
 ## Analytics Integration
