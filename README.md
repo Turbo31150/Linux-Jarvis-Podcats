@@ -143,6 +143,41 @@ This project is part of the **JARVIS** distributed AI cluster:
 - [gemini-live-trading-agent](https://github.com/Turbo31150/gemini-live-trading-agent) — Voice Trading Assistant
 - **Linux-Jarvis-Podcasts** — AI Podcasts from System Logs *(this repo)*
 
+
+
+## What is JARVIS Podcast?
+
+An AI-powered podcast production pipeline. Give it a topic — it researches, writes a script, generates audio with neural TTS, and produces a ready-to-publish podcast episode. All running locally on your GPU.
+
+## How It Works
+
+```
+1. Topic Input → "AI agents in production: challenges and solutions"
+2. Research → Perplexity/web search for latest info
+3. Script → AI writes a structured 10-minute script
+4. TTS → Neural text-to-speech generates natural audio
+5. Edit → Auto-add intro, transitions, outro
+6. Output → MP3 ready for Spotify/Apple Podcasts
+```
+
+## Example Output
+
+```
+Episode: "Au-delà des agents IA : l'orchestration autonome"
+Duration: 8:32
+Format: MP3 44.1kHz stereo
+Script: 1,200 words
+Sources: 5 web references
+Generated in: 4 minutes on RTX 3080
+```
+
+## Use Cases
+
+- **Tech blog to podcast** — Convert your articles to audio
+- **Daily briefing** — AI-generated morning news summary
+- **Educational content** — Auto-generate lessons on any topic
+- **Marketing** — Product demos and explainers as audio
+
 ---
 
 ## License
