@@ -183,3 +183,274 @@ Generated in: 4 minutes on RTX 3080
 ## License
 
 MIT © 2026 [Turbo31150](https://github.com/Turbo31150) — Franck Delmas
+
+
+---
+
+## Pipeline Configuration
+
+### TTS Models
+
+The podcast pipeline supports multiple TTS engines, selected based on quality requirements and available hardware:
+
+| Engine | Quality | Speed | GPU Required | Best For |
+|--------|---------|-------|:------------:|----------|
+| **Coqui XTTS v2** | Excellent | ~0.8x real-time on RTX 3080 | Yes | Final production episodes |
+| **Piper TTS** | Good | ~15x real-time on CPU | No | Quick drafts and previews |
+| **Google Cloud TTS** | Excellent | API-dependent | No | Multilingual episodes |
+| **Edge TTS** | Good | Fast (streaming) | No | Free tier, fast iteration |
+
+Configuration in `config/tts.yaml`:
+```yaml
+tts:
+  engine: coqui-xtts-v2       # default engine
+  fallback: piper              # used when GPU unavailable
+  voice: fr-female-1           # speaker voice profile
+  sample_rate: 44100           # audio sample rate (Hz)
+  channels: 2                  # stereo output
+  bitrate: 192k                # MP3 encoding bitrate
+  speed: 1.0                   # playback speed multiplier
+  pitch: 0                     # pitch adjustment (-10 to +10)
+  silence_between_sections: 1.5  # seconds of silence between sections
+```
+
+### Audio Quality Settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `sample_rate` | 44100 Hz | CD-quality audio. Use 22050 for smaller files |
+| `channels` | 2 (stereo) | Use 1 (mono) for speech-only podcasts |
+| `bitrate` | 192 kbps | MP3 encoding quality. 128k for drafts, 320k for premium |
+| `format` | MP3 | Output format. Also supports WAV, OGG, FLAC |
+| `normalize` | true | Apply loudness normalization (LUFS -16) |
+| `noise_gate` | true | Remove background noise below threshold |
+| `compressor` | true | Dynamic range compression for consistent volume |
+
+### Intro/Outro Templates
+
+Templates are stored in `templates/` and support variable interpolation:
+
+**Intro template** (`templates/intro.md`):
+```
+Welcome to {podcast_name}, episode {episode_number}.
+Today is {date}, and here is what happened in the JARVIS cluster.
+{summary_teaser}
+Let us dive in.
+```
+
+**Outro template** (`templates/outro.md`):
+```
+That wraps up episode {episode_number} of {podcast_name}.
+If you found this useful, consider starring the repo on GitHub.
+This episode was generated automatically by the JARVIS podcast pipeline.
+Until next time — keep your GPUs cool and your models loaded.
+```
+
+**Transition template** (`templates/transition.md`):
+```
+Moving on to {next_section}...
+```
+
+---
+
+## Example Scripts
+
+### Tech News Podcast
+
+Generate a weekly tech news roundup by feeding RSS feeds and web search results:
+
+```python
+from podcast_pipeline import PodcastPipeline
+
+pipeline = PodcastPipeline(config="config/tech_news.yaml")
+
+# Define sources
+sources = [
+    {"type": "rss", "url": "https://news.ycombinator.com/rss"},
+    {"type": "rss", "url": "https://feeds.arstechnica.com/arstechnica/technology-lab"},
+    {"type": "search", "query": "AI news this week", "engine": "perplexity"},
+]
+
+# Generate episode
+episode = await pipeline.generate(
+    topic="Weekly AI & Tech News Roundup",
+    sources=sources,
+    style="conversational",
+    duration_target=600,     # 10 minutes target
+    language="fr",
+    date=datetime.now()
+)
+
+print(f"Episode saved: {episode.output_path}")
+print(f"Duration: {episode.duration_seconds}s")
+print(f"Script words: {episode.word_count}")
+```
+
+### Tutorial Podcast
+
+Generate a step-by-step tutorial episode from documentation:
+
+```python
+from podcast_pipeline import PodcastPipeline
+
+pipeline = PodcastPipeline(config="config/tutorial.yaml")
+
+episode = await pipeline.generate(
+    topic="How to Set Up a Multi-GPU AI Cluster on Linux",
+    sources=[
+        {"type": "file", "path": "docs/cluster-setup-guide.md"},
+        {"type": "file", "path": "docs/gpu-configuration.md"},
+    ],
+    style="educational",
+    duration_target=900,     # 15 minutes
+    language="fr",
+    sections=[
+        "Introduction and prerequisites",
+        "Hardware selection and assembly",
+        "Linux installation and driver setup",
+        "Network configuration between nodes",
+        "Model deployment and testing",
+        "Monitoring and maintenance",
+    ]
+)
+```
+
+### Interview-Style Podcast
+
+Generate a simulated two-speaker interview on a technical topic:
+
+```python
+from podcast_pipeline import PodcastPipeline
+
+pipeline = PodcastPipeline(config="config/interview.yaml")
+
+episode = await pipeline.generate(
+    topic="The Future of Local AI vs Cloud AI",
+    style="interview",
+    speakers=[
+        {"name": "Host", "voice": "fr-male-1", "role": "interviewer"},
+        {"name": "Expert", "voice": "fr-female-1", "role": "interviewee"},
+    ],
+    duration_target=1200,    # 20 minutes
+    language="fr",
+    talking_points=[
+        "Cost comparison: local GPU cluster vs cloud API credits",
+        "Privacy and data sovereignty considerations",
+        "Performance benchmarks: latency, throughput, availability",
+        "When cloud makes sense vs when local wins",
+        "The future of edge AI and hybrid architectures",
+    ]
+)
+```
+
+---
+
+## Distribution Guide
+
+### RSS Feed Generation
+
+The pipeline auto-generates a valid RSS 2.0 feed compatible with all podcast directories:
+
+```bash
+# Generate/update the RSS feed after creating new episodes
+npm run feed:generate
+
+# Output: public/feed.xml
+```
+
+The generated feed includes:
+- Episode title, description, and publication date
+- Audio enclosure with file size and MIME type
+- iTunes-specific tags (category, author, image, explicit flag)
+- Podcast namespace tags for modern players
+
+### Publishing to Spotify
+
+1. Create a [Spotify for Podcasters](https://podcasters.spotify.com/) account
+2. Submit your RSS feed URL: `https://yourdomain.com/feed.xml`
+3. Spotify reviews and approves within 24-48 hours
+4. New episodes appear automatically when the feed updates
+
+### Publishing to Apple Podcasts
+
+1. Create an [Apple Podcasts Connect](https://podcastsconnect.apple.com/) account
+2. Add your RSS feed URL
+3. Apple validates the feed format and content
+4. Approval typically takes 1-5 business days
+5. Once approved, new episodes sync automatically
+
+### Publishing to Google Podcasts
+
+Google Podcasts indexes RSS feeds automatically. Ensure your feed is:
+- Publicly accessible via HTTPS
+- Contains valid RSS 2.0 with `<enclosure>` tags
+- Linked from your website with a `<link rel="alternate" type="application/rss+xml">` tag
+
+### Self-Hosting
+
+For full control, serve the podcast from your own infrastructure:
+
+```bash
+# Build the static web player
+npm run build
+
+# Deploy to any static host (GitHub Pages, Netlify, Vercel)
+# Or serve with nginx:
+server {
+    listen 80;
+    server_name podcast.yourdomain.com;
+    root /var/www/podcast/dist;
+    location /episodes/ {
+        add_header Accept-Ranges bytes;
+    }
+}
+```
+
+---
+
+## Analytics Integration
+
+### Built-in Analytics
+
+The web player includes basic analytics tracking:
+
+| Metric | Description |
+|--------|-------------|
+| **Play count** | Number of times each episode is played |
+| **Completion rate** | Percentage of listeners who finish the episode |
+| **Average listen duration** | How long listeners stay engaged |
+| **Drop-off points** | Timestamps where listeners stop |
+| **Popular episodes** | Ranked by total plays and completion |
+
+### External Analytics
+
+Integrate with podcast analytics platforms by adding tracking prefixes to your audio URLs:
+
+```yaml
+# config/analytics.yaml
+analytics:
+  provider: chartable           # or podtrac, podsights
+  prefix: "https://chrt.fm/track/XXXXXX"
+  # Audio URL becomes: https://chrt.fm/track/XXXXXX/yourdomain.com/episodes/ep001.mp3
+```
+
+### Prometheus Metrics
+
+Export pipeline metrics for Grafana dashboards:
+
+```yaml
+# config/metrics.yaml
+metrics:
+  enabled: true
+  port: 9090
+  endpoint: /metrics
+
+# Available metrics:
+# podcast_episodes_generated_total
+# podcast_generation_duration_seconds
+# podcast_tts_duration_seconds
+# podcast_script_word_count
+# podcast_audio_duration_seconds
+# podcast_feed_subscribers_total
+```
+
